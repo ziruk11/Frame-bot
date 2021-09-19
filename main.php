@@ -70,23 +70,24 @@ if($message['photo'][0]['file_id'] != ""){ //if a photo has been sent
   unlink(FILE_IMAGE);
 }
 else{ //welcome message
-  if($message['from']['language_code'] == "it"){
-    execurl("sendMessage",array(
+  switch($message['from']['language_code']){
+    case 'it': 
+      $welcome = "<b>Ciao ".$message['chat']['first_name']."!</b>
+
+Inviami una foto e ti creerò un'immagine profilo con una cornice";
+    break;
+      
+    default:
+      $welcome = "<b>Welcome ".$message['chat']['first_name']."</b>
+
+Please send me a photo and I will create a profile picture with a frame";
+      break;
+  }
+  
+  execurl("sendMessage",array(
       'chat_id' => $chatId, 
       'parse_mode' => 'html', 
-      'text' => "<b>Ciao ".$message['chat']['first_name']."!</b>
-
-Inviami una foto e ti creerò un'immagine profilo con una cornice"
+      'text' => $welcome
   ));
-  }
-  else{
-    execurl("sendMessage",array(
-      'chat_id' => $chatId, 
-      'parse_mode' => 'html', 
-      'text' => "<b>Welcome ".$message['chat']['first_name']."</b>
-
-Please send me a photo and I will create a profile picture with a frame"
-  ));
-  }
 }
 ?>
